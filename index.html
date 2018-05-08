@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>马克画布</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+<div class="title-wrap">
+    <div class="title">
+        &nbsp;&nbsp;&nbsp;&nbsp;马克画布
+    </div>
+</div>
+<div class="map" id="app">
+    <input id="color" type="color" v-model="chooseColor" @change="changeColor" style="display: none;"/>
+    <template v-for="(n,index) in 11000">
+        <div class="item" :data-num="index"></div>
+    </template>
+</div>
+<div class="content-wrap">
+    <div class="content">
+        玩法说明：<br>
+        1. 在你想绘制的位置点击<br>
+        2. 选择要填充的颜色块<br>
+        3. 支付少量矿工费用即可在区块链上记录下该颜色块<br>
+        <br>
+        发挥你的想象力，和其他人一起在区块链上创造出更有趣，更好玩的作品吧
+    </div>
+</div>
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="js/nebPay.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var temp_initDrawData=[{"bn": 2274, "color": "#e32d1b"}, {
+        "bn": 2275,
+        "color": "#e32d1b"
+    }, {"bn": 2276, "color": "#e32d1b"}, {"bn": 2277, "color": "#e32d1b"}, {
+        "bn": 2414,
+        "color": "#e32d1b"
+    }, {"bn": 2415, "color": "#e32d1b"}, {"bn": 2416, "color": "#e32d1b"}, {
+        "bn": 2417,
+        "color": "#e32d1b"
+    }, {"bn": 2418, "color": "#e32d1b"}, {"bn": 2419, "color": "#e32d1b"}, {
+        "bn": 2420,
+        "color": "#e32d1b"
+    }, {"bn": 2421, "color": "#e32d1b"}, {"bn": 2555, "color": "#3d2e2b"}, {
+        "bn": 2556,
+        "color": "#3d2e2b"
+    }, {"bn": 2557, "color": "#3d2e2b"}, {"bn": 2558, "color": "#fbb92d"}, {
+        "bn": 2559,
+        "color": "#fbb92d"
+    }, {"bn": 2557, "color": "#fbb92d"}, {"bn": 2560, "color": "#3d2e2b"}, {
+        "bn": 2561,
+        "color": "#fbb92d"
+    }, {"bn": 2695, "color": "#3d2e2b"}, {"bn": 2696, "color": "#fbb92d"}, {
+        "bn": 2837,
+        "color": "#fbb92d"
+    }, {"bn": 2697, "color": "#3d2e2b"}, {"bn": 2838, "color": "#3d2e2b"}, {
+        "bn": 2836,
+        "color": "#3d2e2b"
+    }, {"bn": 2977, "color": "#3d2e2b"}, {"bn": 2978, "color": "#3d2e2b"}, {
+        "bn": 2979,
+        "color": "#fbb92d"
+    }, {"bn": 2980, "color": "#fbb92d"}, {"bn": 2698, "color": "#fbb92d"}, {
+        "bn": 2839,
+        "color": "#fbb92d"
+    }, {"bn": 2701, "color": "#3d2e2b"}, {"bn": 2842, "color": "#3d2e2b"}, {
+        "bn": 2983,
+        "color": "#fbb92d"
+    }, {"bn": 2984, "color": "#3d2e2b"}, {"bn": 3124, "color": "#3d2e2b"}, {
+        "bn": 3125,
+        "color": "#3d2e2b"
+    }, {"bn": 3126, "color": "#3d2e2b"}, {"bn": 2702, "color": "#fbb92d"}, {
+        "bn": 2843,
+        "color": "#fbb92d"
+    }, {"bn": 2703, "color": "#fbb92d"}, {"bn": 2844, "color": "#fbb92d"}, {
+        "bn": 2845,
+        "color": "#fbb92d"
+    }, {"bn": 2699, "color": "#3d2e2b"}, {"bn": 2699, "color": "#3d2e2b"}, {
+        "bn": 2700,
+        "color": "#fbb92d"
+    }, {"bn": 2699, "color": "#fbb92d"}, {"bn": 2840, "color": "#fbb92d"}, {
+        "bn": 2841,
+        "color": "#fbb92d"
+    }, {"bn": 2843, "color": "#3d2e2b"}, {"bn": 2842, "color": "#fbb92d"}, {
+        "bn": 2982,
+        "color": "#fbb92d"
+    }, {"bn": 3120, "color": "#fbb92d"}, {"bn": 3121, "color": "#fbb92d"}, {
+        "bn": 2981,
+        "color": "#fbb92d"
+    }, {"bn": 3122, "color": "#fbb92d"}, {"bn": 3123, "color": "#fbb92d"}, {
+        "bn": 2983,
+        "color": "#3d2e2b"
+    }, {"bn": 2985, "color": "#3d2e2b"}, {"bn": 3124, "color": "#fbb92d"}, {
+        "bn": 3125,
+        "color": "#fbb92d"
+    }, {"bn": 3126, "color": "#fbb92d"}, {"bn": 3260, "color": "#e32d1b"}, {
+        "bn": 3261,
+        "color": "#e32d1b"
+    }, {"bn": 3262, "color": "#e32d1b"}, {"bn": 3262, "color": "#38448e"}, {
+        "bn": 3263,
+        "color": "#38448e"
+    }, {"bn": 3264, "color": "#e32d1b"}, {"bn": 3265, "color": "#e32d1b"}, {
+        "bn": 3266,
+        "color": "#e32d1b"
+    }, {"bn": 3403, "color": "#38448e"}, {"bn": 3404, "color": "#38448e"}, {
+        "bn": 3400,
+        "color": "#e32d1b"
+    }, {"bn": 3401, "color": "#e32d1b"}, {"bn": 3402, "color": "#e32d1b"}, {
+        "bn": 3405,
+        "color": "#e32d1b"
+    }, {"bn": 3406, "color": "#e32d1b"}, {"bn": 3407, "color": "#38448e"}, {
+        "bn": 3408,
+        "color": "#e32d1b"
+    }, {"bn": 3409, "color": "#e32d1b"}, {"bn": 3550, "color": "#e32d1b"}, {
+        "bn": 3551,
+        "color": "#e32d1b"
+    }, {"bn": 3549, "color": "#e32d1b"}, {"bn": 3548, "color": "#fceb3d"}, {
+        "bn": 3544,
+        "color": "#fceb3d"
+    }, {"bn": 3545, "color": "#fceb3d"}, {"bn": 3546, "color": "#38448e"}, {
+        "bn": 3547,
+        "color": "#38448e"
+    }, {"bn": 3690, "color": "#38448e"}, {"bn": 3689, "color": "#38448e"}, {
+        "bn": 3688,
+        "color": "#38448e"
+    }, {"bn": 3687, "color": "#38448e"}, {"bn": 3686, "color": "#38448e"}, {
+        "bn": 3685,
+        "color": "#38448e"
+    }, {"bn": 3543, "color": "#38448e"}, {"bn": 3684, "color": "#38448e"}, {
+        "bn": 3540,
+        "color": "#e32d1b"
+    }, {"bn": 3541, "color": "#e32d1b"}, {"bn": 3542, "color": "#e32d1b"}, {
+        "bn": 3681,
+        "color": "#fbb92d"
+    }, {"bn": 3682, "color": "#fbb92d"}, {"bn": 3683, "color": "#38448e"}, {
+        "bn": 3824,
+        "color": "#fbb92d"
+    }, {"bn": 3822, "color": "#fbb92d"}, {"bn": 3823, "color": "#fbb92d"}, {
+        "bn": 3963,
+        "color": "#fbb92d"
+    }, {"bn": 3964, "color": "#fbb92d"}, {"bn": 3965, "color": "#38448e"}, {
+        "bn": 3825,
+        "color": "#38448e"
+    }, {"bn": 3826, "color": "#38448e"}, {"bn": 3966, "color": "#38448e"}, {
+        "bn": 3967,
+        "color": "#38448e"
+    }, {"bn": 3827, "color": "#38448e"}, {"bn": 3828, "color": "#38448e"}, {
+        "bn": 3968,
+        "color": "#38448e"
+    }, {"bn": 3969, "color": "#38448e"}, {"bn": 3829, "color": "#38448e"}, {
+        "bn": 3970,
+        "color": "#38448e"
+    }, {"bn": 4106, "color": "#38448e"}, {"bn": 4107, "color": "#38448e"}, {
+        "bn": 4108,
+        "color": "#38448e"
+    }, {"bn": 4112, "color": "#38448e"}, {"bn": 3971, "color": "#38448e"}, {
+        "bn": 3691,
+        "color": "#fbb92d"
+    }, {"bn": 3692, "color": "#fbb92d"}, {"bn": 3831, "color": "#fbb92d"}, {
+        "bn": 3832,
+        "color": "#fbb92d"
+    }, {"bn": 3833, "color": "#fbb92d"}, {"bn": 3973, "color": "#fbb92d"}, {
+        "bn": 3974,
+        "color": "#fbb92d"
+    }, {"bn": 3830, "color": "#38448e"}, {"bn": 3972, "color": "#38448e"}, {
+        "bn": 4113,
+        "color": "#38448e"
+    }, {"bn": 4114, "color": "#38448e"}, {"bn": 4254, "color": "#400000"}, {
+        "bn": 4255,
+        "color": "#400000"
+    }, {"bn": 4256, "color": "#400000"}, {"bn": 4396, "color": "#400000"}, {
+        "bn": 4397,
+        "color": "#400000"
+    }, {"bn": 4398, "color": "#400000"}, {"bn": 4248, "color": "#400000"}, {
+        "bn": 4395,
+        "color": "#400000"
+    }, {"bn": 4247, "color": "#400000"}, {"bn": 4246, "color": "#400000"}, {
+        "bn": 4388,
+        "color": "#400000"
+    }, {"bn": 4387, "color": "#400000"}, {"bn": 4386, "color": "#400000"}, {
+        "bn": 4389,
+        "color": "#400000"
+    }, {"bn": 5231, "color": "#e32d1b"}, {"bn": 5372, "color": "#e32d1b"}, {
+        "bn": 5512,
+        "color": "#e32d1b"
+    }, {"bn": 5513, "color": "#fbb92d"}, {"bn": 5514, "color": "#fbb92d"}, {
+        "bn": 5515,
+        "color": "#408080"
+    }, {"bn": 2717, "color": "#ff0080"}, {"bn": 2718, "color": "#ff0080"}, {
+        "bn": 2577,
+        "color": "#ff0080"
+    }, {"bn": 2719, "color": "#ff0080"}, {"bn": 2859, "color": "#ff0080"}];
+    var initDrawData=[];
+    for(var i=0;i<temp_initDrawData.length;i++){
+        initDrawData.push({
+            key:'',
+            value:JSON.stringify(temp_initDrawData[i])
+        })
+    }
+</script>
+<script>
+    var bn = 0;
+    var app = new Vue({
+        el: '#app',
+        data: {
+            chooseColor: '#fff',
+            colorData: []
+        },
+        mounted: function () {
+        },
+        watch: {
+            colorData: function () {
+                if(this.colorData.length==0) return;
+                for (var i = 0; i < this.colorData.length; i++) {
+                    var tempObj=JSON.parse(this.colorData[i].value);
+                    $('.item[data-num|="' + tempObj.bn + '"]').css('background', tempObj.color);
+                }
+            }
+        },
+        methods: {
+            changeColor: function () {
+                var color = this.chooseColor;
+                var obj = {
+                    bn: bn,
+                    color: color
+                }
+                //sessionStorage.setItem('draw', JSON.stringify(this.colorData));
+                this.chooseColor = '#fff';
+                push(obj);
+            }
+        }
+    });
+
+    $('.map').on('click', '.item', function () {
+        bn = $(this).data('num');
+        $('#color').trigger('click');
+    })
+</script>
+<script>
+    var NebPay = require("nebpay"); //https://github.com/nebulasio/nebPay
+    var nebPay = new NebPay();
+
+    //检查扩展是否已安装
+    //如果安装了扩展，var“webExtensionWallet”将被注入到web页面中1
+    if(typeof(webExtensionWallet) === "undefined") {
+        //alert ("扩展钱包未安装，请先安装.")
+        $("#noExtension").show();
+    }
+
+    var dappAddress = "n1thx6yo8HtQMBa6fFWwuPHxKUuXPySqaCZ";
+    var initKey = '';
+    setInterval(function() {
+        getWish();
+    }, 15000);
+    getWish();
+    // 初始化秘密
+    function getWish() {
+        initKey = 'd:' + new Date().getTime() + RndNum(3);
+        var to = dappAddress;
+        var value = "0";
+        var callFunction = "forEach";
+        var callArgs = "[99999,0]"; //in the form of ["args"]
+        nebPay.simulateCall(to, value, callFunction, callArgs, { //使用nebpay的simulateCall接口去执行get查询, 模拟执行.不发送交易,不上链
+            listener: cbSearch //指定回调函数
+        });
+    }
+
+    //return of search,
+    function cbSearch(resp) {
+        if(!resp.result) return;
+        var result = eval(JSON.parse(resp.result));
+        if(result !== 'null') {
+            // 指定一个初始化数据
+            result=result.concat(initDrawData);
+            Vue.set(app, 'colorData', result)
+        }
+    }
+
+    // 提交秘密
+    function push(obj) {
+        var to = dappAddress;
+        var value = "0";
+        var callFunction = "set"
+        var callArgs = [];
+        callArgs.push(initKey);
+        callArgs.push(JSON.stringify(obj));
+        nebPay.call(to, value, callFunction, JSON.stringify(callArgs), { //使用nebpay的call接口去调用合约,
+            listener: cbPush
+        });
+    }
+
+    function cbPush(resp) {
+        console.log("response of push: " + resp);
+        //$('.item[data-num|="' + bn + '"]').css('background', color);
+    }
+
+    //产生随机数函数
+    function RndNum(n) {
+        var rnd = "";
+        for(var i = 0; i < n; i++)
+            rnd += Math.floor(Math.random() * 10);
+        return rnd;
+    }
+</script>
+</body>
+</html>

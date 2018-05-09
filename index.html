@@ -12,6 +12,10 @@
     </div>
 </div>
 <div class="map" id="app">
+    <div class="noExtension" id="noExtension">
+        提示: 请安装
+        <a target="_blank" href="https://github.com/ChengOrangeJu/WebExtensionWallet">WebExtensionWallet</a> 再使用
+    </div>
     <input id="color" type="color" v-model="chooseColor" @change="changeColor" style="display: none;"/>
     <template v-for="(n,index) in 11000">
         <div class="item" :data-num="index"></div>
@@ -27,7 +31,8 @@
         <br>
         <br>
         <div class="link">
-            使用<a href="https://nebulas.io/">星云链</a>驱动，<a href="https://incentive.nebulas.io/cn/signup.html?invite=32KAi">提交DAPP获得100NAS</a>
+            使用<a href="https://nebulas.io/">星云链</a>驱动，<a
+                href="https://incentive.nebulas.io/cn/signup.html?invite=32KAi">提交DAPP获得100NAS</a>
         </div>
     </div>
 </div>
@@ -36,7 +41,7 @@
 <script src="js/nebPay.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
 <script>
-    var temp_initDrawData=[{"bn": 2274, "color": "#e32d1b"}, {
+    var temp_initDrawData = [{"bn": 2274, "color": "#e32d1b"}, {
         "bn": 2275,
         "color": "#e32d1b"
     }, {"bn": 2276, "color": "#e32d1b"}, {"bn": 2277, "color": "#e32d1b"}, {
@@ -196,11 +201,11 @@
         "bn": 2577,
         "color": "#ff0080"
     }, {"bn": 2719, "color": "#ff0080"}, {"bn": 2859, "color": "#ff0080"}];
-    var initDrawData=[];
-    for(var i=0;i<temp_initDrawData.length;i++){
+    var initDrawData = [];
+    for (var i = 0; i < temp_initDrawData.length; i++) {
         initDrawData.push({
-            key:'',
-            value:JSON.stringify(temp_initDrawData[i])
+            key: '',
+            value: JSON.stringify(temp_initDrawData[i])
         })
     }
 </script>
@@ -216,9 +221,9 @@
         },
         watch: {
             colorData: function () {
-                if(this.colorData.length==0) return;
+                if (this.colorData.length == 0) return;
                 for (var i = 0; i < this.colorData.length; i++) {
-                    var tempObj=JSON.parse(this.colorData[i].value);
+                    var tempObj = JSON.parse(this.colorData[i].value);
                     $('.item[data-num|="' + tempObj.bn + '"]').css('background', tempObj.color);
                 }
             }
@@ -246,19 +251,22 @@
     var NebPay = require("nebpay"); //https://github.com/nebulasio/nebPay
     var nebPay = new NebPay();
 
-    //检查扩展是否已安装
-    //如果安装了扩展，var“webExtensionWallet”将被注入到web页面中1
-    if(typeof(webExtensionWallet) === "undefined") {
-        //alert ("扩展钱包未安装，请先安装.")
-        $("#noExtension").show();
-    }
+    $(function () {
+        //检查扩展是否已安装
+        //如果安装了扩展，var“webExtensionWallet”将被注入到web页面中1
+        if (typeof(webExtensionWallet) === "undefined") {
+            //alert ("扩展钱包未安装，请先安装.")
+            $("#noExtension").show();
+        }
+    });
 
     var dappAddress = "n1qbERCkec3KYnmB1UNejivqKiqDX6ZDJDD";
     var initKey = '';
-    setInterval(function() {
+    setInterval(function () {
         getWish();
     }, 15000);
     getWish();
+
     // 初始化秘密
     function getWish() {
         initKey = 'd:' + new Date().getTime() + RndNum(3);
@@ -273,11 +281,11 @@
 
     //return of search,
     function cbSearch(resp) {
-        if(!resp.result) return;
+        if (!resp.result) return;
         var result = eval(JSON.parse(resp.result));
-        if(result !== 'null') {
+        if (result !== 'null') {
             // 指定一个初始化数据
-            result=result.concat(initDrawData);
+            result = result.concat(initDrawData);
             Vue.set(app, 'colorData', result)
         }
     }
@@ -303,7 +311,7 @@
     //产生随机数函数
     function RndNum(n) {
         var rnd = "";
-        for(var i = 0; i < n; i++)
+        for (var i = 0; i < n; i++)
             rnd += Math.floor(Math.random() * 10);
         return rnd;
     }

@@ -57,3 +57,13 @@ body{
 .link a{
     color: #fff;
 }
+
+#noExtension{
+    padding-top: 200px;
+    text-align: center;
+    font-size: 22px;
+    position: absolute;
+    width: 100%;
+    display: none;
+    z-index: 9999;
+}
